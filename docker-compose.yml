@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  cloudflared:
+    container_name: cloudflared
+    image: visibilityspots/cloudflared:latest
+    restart: unless-stopped
+    networks:
+      pihole_net:
+        ipv4_address: 10.0.0.2
+    environment:
+      UPSTREAM1: 'https://1.1.1.1/dns-query'
+      UPSTREAM1: 'https://1.0.0.1/dns-query'
+
+  googleflared:
+    container_name: googleflared
+    image: visibilityspots/cloudflared:latest
+    restart: unless-stopped
+    networks:
+      pihole_net:
+        ipv4_address: 10.0.0.4
+    environment:
+      UPSTREAM1: 'https://8.8.8.8/dns-query'
+      UPSTREAM2: 'https://8.8.4.4/dns-query'
+
+  pi-hole:
+    depends_on: [cloudflared, googleflared]
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8088:80/tcp"
+    environment:
+      ServerIP: '10.0.0.3'
+      DNS1: '10.0.0.2#5054'
+      DNS2: '10.0.0.4#5054'
+      IPv6: 'true'
+      TZ: 'America/Los_Angeles'
+      DNSMASQ_LISTENING: 'all'
+      WEBPASSWORD: '949d51e1-65b7-4f86-8d2a-368c1fe50562'
+      VIRTUAL_HOST: 'pi-hole.local'
+    networks:
+      pihole_net:
+        ipv4_address: 10.0.0.3
+    dns:
+      - 127.0.0.1
+    volumes:
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+networks:
+  pihole_net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.0.0.0/29
