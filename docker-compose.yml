@@ -32,7 +32,7 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
-      - "8088:80/tcp"
+      - "8088:8088/tcp"
     environment:
       ServerIP: '10.0.0.3'
       DNS1: '10.0.0.2#5054'
