@@ -1,3 +1,4 @@
+name: docker-compose-pihole-doh
 version: "3"
 
 services:
