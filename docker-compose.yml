@@ -54,8 +54,8 @@ services:
       IPv6: 'true'
       TZ: 'America/Los_Angeles'
       DNSMASQ_LISTENING: 'all'
-      WEBPASSWORD: '949d51e1-65b7-4f86-8d2a-368c1fe50562'
-      VIRTUAL_HOST: 'pi-hole.local'
+      WEBPASSWORD: ${WEBPASSWORD}
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
     networks:
       pihole_net:
         ipv4_address: 10.0.0.3

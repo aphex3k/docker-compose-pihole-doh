@@ -7,10 +7,7 @@ Docker composition for Pi-Hole with DNS over HTTPS.
 1. [Install docker](https://www.docker.com/get-started) if you haven't already.
 1. [Install docker-compose](https://docs.docker.com/compose/install/) if you haven't already.
 1. Clone the repository or download the `docker-compose.yml` file.
-1. In the `docker-compose.yml` modify the following lines:
-   - `WEBPASSWORD: '949d51e1-65b7-4f86-8d2a-368c1fe50562'`
-This will be your password to log in to the web administration interface of pi-hole
-   - `VIRTUAL_HOST: 'pi-hole.local'` This will be your virtual host name for pi-hole.
+1. Modify the `.env.example` file and rename to `.env`
 1. Run `docker-compose up --detach` from the directory you copied the file to and docker should do the rest.
 
 After successfull startup you should see 3 container running. You can check their status with `docker ps`.
